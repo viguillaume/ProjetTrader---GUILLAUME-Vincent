@@ -38,17 +38,18 @@ namespace WPFTrader
         {
             lstActions.ItemsSource = gstBdd.getAllActionsByTrader((lstTraders.SelectedItem as Trader).NumTrader);
             lstActionsNonPossedees.ItemsSource = gstBdd.getAllActionsByTrader((lstTraders.SelectedItem as Trader).NumTrader);
-            txtTotalPortefeuille = gstBdd.getTotalPortefeuille((lstTraders.SelectedItem as Trader).NumTrader);
+            txtTotalPortefeuille.Text = gstBdd.getTotalPortefeuille((lstTraders.SelectedItem as Trader).NumTrader).ToString();
         }
 
         private void lstActions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            //if (txtPrixAchat == gstBdd.getCoursReel(lstActions.SelectedItem as ActionPerso))
+            // ne marche pas
         }
 
         private void btnVendre_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void btnAcheter_Click(object sender, RoutedEventArgs e)

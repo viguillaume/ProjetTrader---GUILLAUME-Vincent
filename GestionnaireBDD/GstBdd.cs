@@ -72,7 +72,13 @@ namespace GestionnaireBDD
 
         public double getCoursReel(int numAction)
         {
-            return 0;
+            double coursReel;
+            cmd = new MySqlCommand("SELECT coursReel FROM Action WHERE idAction = " + numAction, cnx);
+            dr = cmd.ExecuteReader();
+            dr.Read();
+            coursReel = Convert.ToDouble(dr[0].ToString());
+            dr.Close();
+            return coursReel;
         }
         public void AcheterAction(int numAction, int numTrader, double prix, int quantite)
         {

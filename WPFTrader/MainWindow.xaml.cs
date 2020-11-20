@@ -22,6 +22,7 @@ namespace WPFTrader
     /// </summary>
     public partial class MainWindow : Window
     {
+        GstBdd gstBdd;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,12 +30,15 @@ namespace WPFTrader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            gstBdd = new GstBdd();
+            lstTraders.ItemsSource = gstBdd.getAllTraders();
         }
 
         private void lstTraders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            lstActions.ItemsSource = gstBdd.getAllActionsByTrader((lstTraders.SelectedItem as Trader).NumTrader);
+            lstActionsNonPossedees.ItemsSource = gstBdd.getAllActionsByTrader((lstTraders.SelectedItem as Trader).NumTrader);
+            txtTotalPortefeuille = gstBdd.getTotalPortefeuille((lstTraders.SelectedItem as Trader).NumTrader);
         }
 
         private void lstActions_SelectionChanged(object sender, SelectionChangedEventArgs e)

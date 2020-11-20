@@ -21,16 +21,43 @@ namespace GestionnaireBDD
 
         public List<Trader> getAllTraders()
         {
-            return null;
+            List<Trader> lestraders = new List<Trader>();
+            cmd = new MySqlCommand("select idTrader, nomTrader from trader;", cnx);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                Trader unTrader = new Trader(Convert.ToInt16(dr[0].ToString()), dr[1].ToString());
+                lestraders.Add(unTrader);
+            }
+            dr.Close();
+            return lestraders;
         }
         public List<ActionPerso> getAllActionsByTrader(int numTrader)
         {
-            return null;
+            List<ActionPerso> lesActions = new List<ActionPerso>();
+            cmd = new MySqlCommand("SELECT idAction,nomAction, prixAchat, quantite, prixAchat*quantite FROM action INNER JOIN acheter ON action.idAction = acheter.numAction WHERE acheter.numTrader =" + numTrader, cnx);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                MetierTrader.ActionPerso uneAction = new ActionPerso(Convert.ToInt16(dr[0].ToString()), dr[1].ToString(), Convert.ToDouble(dr[2].ToString()), Convert.ToInt16(dr[3].ToString()), Convert.ToDouble(dr[4].ToString()));
+                lesActions.Add(uneAction);
+            }
+            dr.Close();
+            return lesActions;
         }
 
         public List<MetierTrader.Action> getAllActionsNonPossedees(int numTrader)
         {
-            return null;
+            List<MetierTrader.Action> lesActions = new List<MetierTrader.Action>();
+            cmd = new MySqlCommand("SELECT idAction,nomAction, FROM action INNER JOIN acheter ON action.idAction = acheter.numAction WHERE acheter.numTrader != (Select idTrader from Trader where idTrader =" + numTrader +")",cnx);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                MetierTrader.Action uneAction = new MetierTrader.Action(Convert.ToInt16(dr[0].ToString()), dr[1].ToString());
+                lesActions.Add(uneAction);
+            }
+            dr.Close();
+            return lesActions;
         }
 
         public void SupprimerActionAcheter(int numAction, int numTrader)
@@ -53,7 +80,13 @@ namespace GestionnaireBDD
         }
         public double getTotalPortefeuille(int numTrader)
         {
-            return 0;
+            double total;
+            cmd = new MySqlCommand("SELECT SUM(prixAchat * quantite) FROM action INNER JOIN acheter ON action.idAction = acheter.numAction WHERE acheter.numTrader = " + numTrader, cnx);
+            dr = cmd.ExecuteReader();
+            dr.Read();
+            total = Convert.ToDouble(dr[0].ToString());
+            dr.Close();
+            return total;
         }
     }
 }
